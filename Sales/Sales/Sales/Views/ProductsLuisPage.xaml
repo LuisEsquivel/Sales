@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+
+<!--BindingContext
+    ESTA PAGINA ESTÁ BINDADA CON UN OBJETO LLAMADO Main 
+    QUE SE ENCUENTRA CON UNA LLAVE LLAMADA Locator
+    
+    También la Bindamos al nuevo viewModel que es ProductsLuis en el StackLayout
+    
+    
+    El ItemSource ProductLuis en la ListView es un atributo
+    -->
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Sales.Views.ProductsLuisPage"
+             
+             
+           BindingContext="{Binding Main , Source={StaticResource Locator}}"
+            
+             >
+
+
+    <ContentPage.Content>
+        <StackLayout
+            
+          BindingContext="{Binding ProductsLuis}"  >
+
+            <ListView 
+              ItemsSource="{Binding ProductsLuis}"  >
+
+            </ListView>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,42 @@
+﻿@model Sales.Common.Models.ProductsLuis
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ProductsLuis</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NOM_PROD_VAR)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NOM_PROD_VAR)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PRECIO_DEC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PRECIO_DEC)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UNIDAD_MEDIDA_VAR)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UNIDAD_MEDIDA_VAR)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CVE_PRODUCTO_VAR }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
