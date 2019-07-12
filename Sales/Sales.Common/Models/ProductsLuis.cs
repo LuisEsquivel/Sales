@@ -21,15 +21,16 @@ namespace Sales.Common.Models
         [Required]
         public string NOM_PROD_VAR { get; set; }
 
+        [Required]
         public Decimal PRECIO_DEC { get; set; }
 
         [Required]
         public string UNIDAD_MEDIDA_VAR { get; set; }
 
+        public Boolean IS_AVAILABLE_BIT { get; set; }
 
-        //public Boolean IsAvailable { get; set; }
-
-        //public DateTime PublishOn { get; set; }
+        [Required]
+        public DateTime PUBLISH_ON_DATE { get; set; }
 
     }
 }

@@ -43,7 +43,7 @@ namespace Sales.ViewModels
         private async void LoadProductsLuis()
         {
 
-            var response = await this.apiService.GetList<ProductsLuis>("http://localhost:62623", "/api", "/ProductsLuis");
+            var response = await this.apiService.GetList<ProductsLuis>("https://salesapigratis.azurewebsites.net", "/api", "/ProductsLuis");
 
             //no hay lista de productos
             if (!response.IsSuccess)

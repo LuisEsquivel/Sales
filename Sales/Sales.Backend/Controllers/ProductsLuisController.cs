@@ -48,7 +48,7 @@ namespace Sales.Backend.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "CVE_PRODUCTO_VAR,NOM_PROD_VAR,PRECIO_DEC,UNIDAD_MEDIDA_VAR")] ProductsLuis productsLuis)
+        public async Task<ActionResult> Create([Bind(Include = "CVE_PRODUCTO_VAR,NOM_PROD_VAR,PRECIO_DEC,UNIDAD_MEDIDA_VAR,IS_AVAILABLE_BIT,PUBLISH_ON_DATE")] ProductsLuis productsLuis)
         {
             if (ModelState.IsValid)
             {
@@ -80,7 +80,7 @@ namespace Sales.Backend.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "CVE_PRODUCTO_VAR,NOM_PROD_VAR,PRECIO_DEC,UNIDAD_MEDIDA_VAR")] ProductsLuis productsLuis)
+        public async Task<ActionResult> Edit([Bind(Include = "CVE_PRODUCTO_VAR,NOM_PROD_VAR,PRECIO_DEC,UNIDAD_MEDIDA_VAR,IS_AVAILABLE_BIT,PUBLISH_ON_DATE")] ProductsLuis productsLuis)
         {
             if (ModelState.IsValid)
             {

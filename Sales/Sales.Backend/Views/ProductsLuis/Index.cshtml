@@ -20,6 +20,12 @@
         <th>
             @Html.DisplayNameFor(model => model.UNIDAD_MEDIDA_VAR)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IS_AVAILABLE_BIT)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PUBLISH_ON_DATE)
+        </th>
         <th></th>
     </tr>
 
@@ -33,6 +39,12 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.UNIDAD_MEDIDA_VAR)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IS_AVAILABLE_BIT)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PUBLISH_ON_DATE)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.CVE_PRODUCTO_VAR }) |
