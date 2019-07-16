@@ -9,6 +9,9 @@ namespace Sales.ViewModels
     using Xamarin.Forms;
     using Sales.Common.Models;
     using Sales.Services;
+    using System.Windows.Input;
+    using GalaSoft.MvvmLight.Command;
+    using Sales.Helpers;
 
 
     //ESTA CLASE HEREDA DE LA BASEVIEWMODEL PARA REFRESAR LOS CAMBIOS GENERADOS
@@ -16,6 +19,7 @@ namespace Sales.ViewModels
     {
 
         private ApiService apiService;
+        private bool isRefreshing;
 
 
         //atributo privado
@@ -32,6 +36,16 @@ namespace Sales.ViewModels
         }
 
 
+        //refresar la vista de los productos
+        public bool IsRefreshing
+        {
+
+            get { return this.isRefreshing; }
+            set { this.SetValue(ref this.isRefreshing, value); }
+
+        }
+
+
 
         //creamos el constructor para consumir el SERVICIO
         public ProductsLuisViewModel()
@@ -43,12 +57,27 @@ namespace Sales.ViewModels
         private async void LoadProductsLuis()
         {
 
+            this.IsRefreshing = true;
+
+            //cheacamos si hay conexión y la almacenamos en una vaiable
+            var connection = await this.apiService.CheckConnection();
+            //si´no hay conexión le pintamos un mensaje al usuario
+            if (!connection.IsSuccess)
+            {
+                this.IsRefreshing = false;
+                await Application.Current.MainPage.DisplayAlert(Languages.Error , connection.Message, Languages.Accept);
+                return;
+            }
+
+
+           /* var url = Application.Current.Resources["urlApi"].ToString();*/  //la url está en una llave en el App.xaml
             var response = await this.apiService.GetList<ProductsLuis>("https://salesapigratis.azurewebsites.net", "/api", "/ProductsLuis");
 
             //no hay lista de productos
             if (!response.IsSuccess)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", response.Message, "Accept");
+                this.IsRefreshing = false;
+                await Application.Current.MainPage.DisplayAlert(Languages.Error, response.Message, Languages.Accept);
                 return;
             }
 
@@ -58,6 +87,18 @@ namespace Sales.ViewModels
 
             //pasamos esa lista a ObservableCollection
             this.ProductsLuis = new ObservableCollection<ProductsLuis>(list);
+            this.IsRefreshing = false;
         }
+
+        public ICommand RefreshCommand
+        {
+            get
+            {
+                return new RelayCommand(LoadProductsLuis);
+               
+            }
+            
+        }
+
     }
 }

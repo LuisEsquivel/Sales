@@ -13,6 +13,11 @@
             <!--LOCATOR-->
             <infra:InstanceLocator x:Key="Locator" />
 
+
+            <!--URL-->
+            <x:String x:Key="urlApi">https://salesapigratis.azurewebsites.net</x:String>
+
+
         </ResourceDictionary>
 
 

@@ -22,14 +22,25 @@ namespace Sales.Common.Models
         public string NOM_PROD_VAR { get; set; }
 
         [Required]
+        [DataType(DataType.MultilineText)]
+        public string REMARK_VAR { get; set; }
+
+        [Required][Display (Name="Image")]
+        public string RUTA_IMAGEN_VAR { get; set; }
+
+        [Required]
+        [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = false)]
         public Decimal PRECIO_DEC { get; set; }
 
         [Required]
         public string UNIDAD_MEDIDA_VAR { get; set; }
 
+        [Display(Name = "IsAvailable")]
         public Boolean IS_AVAILABLE_BIT { get; set; }
 
         [Required]
+        [Display(Name = "PublishOn")]
+        [DataType (DataType.Date)]
         public DateTime PUBLISH_ON_DATE { get; set; }
 
     }

@@ -19,7 +19,7 @@ namespace Sales
             //MainPage = new MainPage();
 
             //LA PÁGINA PRINCIPAL VA A SER ProductsLuisPage
-            MainPage = new ProductsLuisPage();
+            MainPage = new NavigationPage(new ProductsLuisPage());
 
         }
 

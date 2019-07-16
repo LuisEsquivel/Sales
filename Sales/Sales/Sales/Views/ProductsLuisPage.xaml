@@ -12,21 +12,69 @@
     -->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             
+             xmlns:i18n="clr-namespace:Sales.Helpers"
+             
              x:Class="Sales.Views.ProductsLuisPage"
              
              
            BindingContext="{Binding Main , Source={StaticResource Locator}}"
             
-             >
+           Title= "{i18n:Translate Products}"  >
 
 
     <ContentPage.Content>
         <StackLayout
             
-          BindingContext="{Binding ProductsLuis}"  >
+          BindingContext="{Binding ProductsLuis}"
+          Padding="5" >
+
 
             <ListView 
-              ItemsSource="{Binding ProductsLuis}"  >
+                
+             HasUnevenRows="True"
+                            
+             IsRefreshing="{Binding IsRefreshing}"  
+             IsPullToRefreshEnabled="True"    
+             ItemsSource="{Binding ProductsLuis}"  
+             RefreshCommand="{Binding RefreshCommand}"  >
+              
+                <ListView.ItemTemplate>
+
+                    <DataTemplate>
+
+                        <ViewCell>
+
+                            <Grid>
+
+                                <Grid.ColumnDefinitions>
+
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="*"/>
+
+                                </Grid.ColumnDefinitions>
+
+                                <Label
+                                    FontAttributes="Bold"
+                                    Grid.Column="0"
+                                    Text="{Binding NOM_PROD_VAR}">
+                                </Label>
+
+                                <Label
+                                 
+                                    Grid.Column="1"
+                                    HorizontalOptions="End"
+                                    Text="{Binding PRECIO_DEC, StringFormat='{0:C2}' }">
+                                </Label>
+
+
+                            </Grid>
+                                
+                        </ViewCell>
+                        
+                    </DataTemplate>
+                    
+                </ListView.ItemTemplate>
 
             </ListView>
 

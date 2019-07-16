@@ -9,15 +9,49 @@ namespace Sales.Services
     using Sales.Common.Models;
     using System.Net.Http;
     using Newtonsoft.Json;
+    using Plugin.Connectivity;
+    using Sales.Helpers;
 
     public class ApiService
     {
 
 
-        //CREAMOS UN METODO GENERICO PARA CONSUMIR DE CUALQUIER SERVICIO API
-        //CUALQUIER LISTA DE UN OBJETO DEBES ASIGNAR T ASI>>> GetList<T>
+        //ESTA CLASE ESTÁ EN EL PROYECTO DE jZuluaga y es para checar que el usuario tiene conexión a internet
+        public async Task<Response> CheckConnection()
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message =  Languages.TurnOnInternet,
+                };
+            }
 
-        public async Task<Response> GetList<T>(string urlBase, string prefix, string controller)
+            var isReachable = await CrossConnectivity.Current.IsRemoteReachable("google.com");
+            if (!isReachable)
+            {
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message = Languages.NoInternet,
+                };
+            }
+
+            return new Response
+            {
+                IsSuccess = true,
+            };
+        }
+    
+
+
+
+
+    //CREAMOS UN METODO GENERICO PARA CONSUMIR DE CUALQUIER SERVICIO API
+    //CUALQUIER LISTA DE UN OBJETO DEBES ASIGNAR T ASI>>> GetList<T>
+
+    public async Task<Response> GetList<T>(string urlBase, string prefix, string controller)
         {
             try
             {
