@@ -25,7 +25,7 @@ namespace Sales.Common.Models
         [DataType(DataType.MultilineText)]
         public string REMARK_VAR { get; set; }
 
-        [Required][Display (Name="Image")]
+        [Display (Name="Image")]
         public string RUTA_IMAGEN_VAR { get; set; }
 
         [Required]

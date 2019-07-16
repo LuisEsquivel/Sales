@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Sales.Common.Models.ProductsLuis >
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create", new { }, new {@class="btn btn-primary"})
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.NOM_PROD_VAR)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.REMARK_VAR)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.RUTA_IMAGEN_VAR )
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.PRECIO_DEC)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UNIDAD_MEDIDA_VAR)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IS_AVAILABLE_BIT)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PUBLISH_ON_DATE)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.NOM_PROD_VAR)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.REMARK_VAR)
+        </td>
+        <td>
+            @if (!string.IsNullOrEmpty(item.RUTA_IMAGEN_VAR))
+            {
+                <img src="@Url.Content(item.RUTA_IMAGEN_VAR)" alt="Image" style="width:100px;height:150px;max-width: 100%; height: auto;" />
+            }
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PRECIO_DEC)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UNIDAD_MEDIDA_VAR)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IS_AVAILABLE_BIT)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PUBLISH_ON_DATE)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.CVE_PRODUCTO_VAR }, new { @class="btn btn-warning"}) |
+            @Html.ActionLink("Details", "Details", new { id=item.CVE_PRODUCTO_VAR }, new { @class = "btn btn-primary" }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.CVE_PRODUCTO_VAR }, new { @class = "btn btn-danger" })
+        </td>
+    </tr>
+}
+
+</table>
