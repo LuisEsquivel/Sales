@@ -43,5 +43,21 @@ namespace Sales.Common.Models
         [DataType (DataType.Date)]
         public DateTime PUBLISH_ON_DATE { get; set; }
 
+
+        public string  ImageFullPath
+        {
+            get
+            {
+                if(!string.IsNullOrEmpty(this.RUTA_IMAGEN_VAR))
+                {
+                    return $"https://salesbackendgratis.azurewebsites.net/{this.RUTA_IMAGEN_VAR.Substring(1)}";
+
+                }
+
+                    return "noproduct";
+            }
+        }
+
+
     }
 }

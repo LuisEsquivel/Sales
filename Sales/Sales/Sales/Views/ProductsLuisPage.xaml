@@ -22,6 +22,13 @@
             
            Title= "{i18n:Translate Products}"  >
 
+    <ContentPage.ToolbarItems>
+
+        <ToolbarItem 
+            Icon="ic_action_add_circle" Command="{Binding AddProductCommand}">
+        </ToolbarItem>
+        
+    </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
         <StackLayout
@@ -49,20 +56,38 @@
 
                                 <Grid.ColumnDefinitions>
 
+                                    <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="2*"/>
                                     <ColumnDefinition Width="*"/>
 
                                 </Grid.ColumnDefinitions>
 
-                                <Label
-                                    FontAttributes="Bold"
+                                <Image
                                     Grid.Column="0"
-                                    Text="{Binding NOM_PROD_VAR}">
-                                </Label>
+                                    Source="{Binding ImageFullPath}"
+                                    WidthRequest="100"
+                                   ></Image>
 
+                                <StackLayout
+                                    Grid.Column="1"
+                                    VerticalOptions="Center">
+
+                                    <Label
+                                    FontAttributes="Bold"
+                                    Grid.Column="1"
+                                    Text="{Binding NOM_PROD_VAR}">
+                                    </Label>
+                                    
+                                    <Label
+                                       Text="{Binding REMARK_VAR}">
+                                    </Label>
+                                    
+                                </StackLayout>
+                                
+ 
                                 <Label
                                  
-                                    Grid.Column="1"
+                                    Grid.Column="2"
                                     HorizontalOptions="End"
                                     Text="{Binding PRECIO_DEC, StringFormat='{0:C2}' }">
                                 </Label>

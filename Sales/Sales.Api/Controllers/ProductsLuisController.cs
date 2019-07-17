@@ -9,14 +9,14 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using Sales.Api.Models;
 using Sales.Common.Models;
-using Sales.Domain.Models;
 
 namespace Sales.Api.Controllers
 {
     public class ProductsLuisController : ApiController
     {
-        private DataContext db = new DataContext();
+        private LocalDataContext db = new LocalDataContext();
 
         // GET: api/ProductsLuis
         public IQueryable<ProductsLuis> GetProductsLuis()
