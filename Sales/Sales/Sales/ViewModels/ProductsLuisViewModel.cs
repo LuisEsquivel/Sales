@@ -18,13 +18,14 @@ namespace Sales.ViewModels
     public class ProductsLuisViewModel : BaseViewModel
     {
 
+        #region Attributes
         private ApiService apiService;
         private bool isRefreshing;
-
-
         //atributo privado
         public ObservableCollection<ProductsLuis> productsLuis;
+        #endregion
 
+        #region Properties
         //creamos una colección de ProductsLuis
         //refresca la viewModel
         public ObservableCollection<ProductsLuis> ProductsLuis
@@ -44,16 +45,19 @@ namespace Sales.ViewModels
             set { this.SetValue(ref this.isRefreshing, value); }
 
         }
+        #endregion
 
-
-
+        #region Constructor
         //creamos el constructor para consumir el SERVICIO
         public ProductsLuisViewModel()
         {
+            instance = this;
             this.apiService = new ApiService();
             this.LoadProductsLuis();
         }
+        #endregion
 
+        #region Methods
         private async void LoadProductsLuis()
         {
 
@@ -65,12 +69,12 @@ namespace Sales.ViewModels
             if (!connection.IsSuccess)
             {
                 this.IsRefreshing = false;
-                await Application.Current.MainPage.DisplayAlert(Languages.Error , connection.Message, Languages.Accept);
+                await Application.Current.MainPage.DisplayAlert(Languages.Error, connection.Message, Languages.Accept);
                 return;
             }
 
 
-           /* var url = Application.Current.Resources["urlApi"].ToString();*/  //la url está en una llave en el App.xaml
+            /* var url = Application.Current.Resources["urlApi"].ToString();*/  //la url está en una llave en el App.xaml
             var response = await this.apiService.GetList<ProductsLuis>("https://salesapigratis.azurewebsites.net", "/api", "/ProductsLuis");
 
             //no hay lista de productos
@@ -88,17 +92,35 @@ namespace Sales.ViewModels
             //pasamos esa lista a ObservableCollection
             this.ProductsLuis = new ObservableCollection<ProductsLuis>(list);
             this.IsRefreshing = false;
+        } 
+        #endregion
+
+        #region Singlenton
+        private static ProductsLuisViewModel instance;
+
+        public static ProductsLuisViewModel GetInstance()
+        {
+            if(instance == null)
+            {
+                return new ProductsLuisViewModel();
+            }
+
+            return instance;
         }
 
+        #endregion
+
+        #region Commands
         public ICommand RefreshCommand
         {
             get
             {
                 return new RelayCommand(LoadProductsLuis);
-               
+
             }
-            
-        }
+
+        } 
+        #endregion
 
     }
 }

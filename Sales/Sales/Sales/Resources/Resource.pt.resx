@@ -132,4 +132,59 @@
   <data name="Products" xml:space="preserve">
     <value>Produtos</value>
   </data>
+  <data name="AddProduct" xml:space="preserve">
+    <value>AddProduct!</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nome:</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Preço</value>
+  </data>
+  <data name="NamePlaceHolder" xml:space="preserve">
+    <value>Digite o nome do produto.</value>
+  </data>
+  <data name="PricePlaceHolder" xml:space="preserve">
+    <value>Insira Preço de Produto</value>
+  </data>
+  <data name="Remarks" xml:space="preserve">
+    <value>Comentários:</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Salvar</value>
+  </data>
+  <data name="ChangeImage" xml:space="preserve">
+    <value>Alterar Imagem</value>
+  </data>
+  <data name="PriceError" xml:space="preserve">
+    <value>Você deve inserir um preço maior que zero.</value>
+  </data>
+  <data name="DescriptionError" xml:space="preserve">
+    <value>Você deve inserir um nome.</value>
+  </data>
+  <data name="KeyProduct" xml:space="preserve">
+    <value>Chave do Produto</value>
+  </data>
+  <data name="KeyPlaceHolder" xml:space="preserve">
+    <value>Digite a Chave do Produto (Product Key)</value>
+  </data>
+  <data name="UnitOfMeasurement" xml:space="preserve">
+    <value>Unidade de Medida</value>
+  </data>
+  <data name="UnitOfMeasurementPlaceHolder" xml:space="preserve">
+    <value>Digite a unidade de medida!</value>
+  </data>
+
+  <data name="ImageSource" xml:space="preserve">
+    <value>Onde você tira a foto ?!</value>
+  </data>
+  <data name="FromGallery" xml:space="preserve">
+    <value>Da Galeria</value>
+  </data>
+  <data name="NewPicture" xml:space="preserve">
+    <value>Fotografar novamente</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
 </root>

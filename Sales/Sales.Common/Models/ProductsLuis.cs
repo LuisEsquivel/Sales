@@ -6,6 +6,7 @@ namespace Sales.Common.Models
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -43,6 +44,8 @@ namespace Sales.Common.Models
         [DataType (DataType.Date)]
         public DateTime PUBLISH_ON_DATE { get; set; }
 
+        [NotMapped]//para que no me lo mapé a la base de datos ya que no forma parte de la base de datos
+        public byte[] ImageArray { get; set; }
 
         public string  ImageFullPath
         {

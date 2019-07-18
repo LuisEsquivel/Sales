@@ -24,7 +24,7 @@ namespace Sales.Services
                 return new Response
                 {
                     IsSuccess = false,
-                    Message =  Languages.TurnOnInternet,
+                    Message = Languages.TurnOnInternet,
                 };
             }
 
@@ -43,20 +43,23 @@ namespace Sales.Services
                 IsSuccess = true,
             };
         }
-    
 
 
 
 
-    //CREAMOS UN METODO GENERICO PARA CONSUMIR DE CUALQUIER SERVICIO API
-    //CUALQUIER LISTA DE UN OBJETO DEBES ASIGNAR T ASI>>> GetList<T>
 
-    public async Task<Response> GetList<T>(string urlBase, string prefix, string controller)
+        //CREAMOS UN METODO GENERICO PARA CONSUMIR DE CUALQUIER SERVICIO API
+        //CUALQUIER LISTA DE UN OBJETO DEBES ASIGNAR T ASI>>> GetList<T>
+
+        public async Task<Response> GetList<T>(string urlBase, string prefix, string controller)
+
+
         {
             try
             {
                 //creamos el objeto de tipo HttpClient
                 var client = new HttpClient();
+
 
                 //le pasamos la URL
                 client.BaseAddress = new Uri(urlBase);
@@ -107,5 +110,73 @@ namespace Sales.Services
             }
         }
 
+
+
+        public async Task<Response> PostList<T>(string urlBase, string prefix, string controller, T model)
+        {
+
+            {
+                try
+                {
+
+                    var request = JsonConvert.SerializeObject(model);
+                    var content = new StringContent(request, Encoding.UTF8, "application/json");
+
+
+                    //creamos el objeto de tipo HttpClient
+                    var client = new HttpClient();
+
+
+                    //le pasamos la URL
+                    client.BaseAddress = new Uri(urlBase);
+
+                    //igual a usar un String.Format y concatenar variables
+                    var url = $"{prefix}{controller}";
+
+                    //enviamos la respuesta
+                    var response = await client.PostAsync(url, content);
+
+                    // obtenemos el contenido de la respuesta JSON
+                    var answer = await response.Content.ReadAsStringAsync();
+
+
+                    //si la respuesta es failled
+                    if (!response.IsSuccessStatusCode)
+                    {
+
+                        //creamos una nueva respuesta para el usuario
+                        return new Response
+                        {
+                            IsSuccess = false,
+                            Message = answer,
+                        };
+
+                    }
+
+                    //procedemos a deserializar el objeto o la respuesta obtenida
+                    var objeto = JsonConvert.DeserializeObject<T>(answer);
+                    return new Response
+                    {
+                        IsSuccess = true,
+                        Result = objeto,
+                    };
+
+
+
+                }
+                catch (Exception EX)
+                {
+                    return new Response
+                    {
+                        IsSuccess = false,
+                        Message = EX.Message,
+                    };
+
+
+                }
+            }
+
+
+        }
     }
 }
