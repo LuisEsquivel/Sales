@@ -52,6 +52,11 @@
 
                         <ViewCell>
 
+                            <ViewCell.ContextActions >
+                                <MenuItem Text="{i18n:Translate Edit}" Command="{Binding EditProductCommand}"></MenuItem>
+                                <MenuItem Text="{i18n:Translate Delete}" Command="{Binding DeleteProductCommand}"></MenuItem>
+                            </ViewCell.ContextActions>
+                            
                             <Grid>
 
                                 <Grid.ColumnDefinitions>

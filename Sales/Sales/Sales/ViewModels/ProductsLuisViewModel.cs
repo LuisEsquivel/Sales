@@ -12,6 +12,7 @@ namespace Sales.ViewModels
     using System.Windows.Input;
     using GalaSoft.MvvmLight.Command;
     using Sales.Helpers;
+    using System.Linq;
 
 
     //ESTA CLASE HEREDA DE LA BASEVIEWMODEL PARA REFRESAR LOS CAMBIOS GENERADOS
@@ -22,13 +23,13 @@ namespace Sales.ViewModels
         private ApiService apiService;
         private bool isRefreshing;
         //atributo privado
-        public ObservableCollection<ProductsLuis> productsLuis;
+        public ObservableCollection<ProductsLuisItemViewModel> productsLuis;
         #endregion
 
         #region Properties
         //creamos una colección de ProductsLuis
         //refresca la viewModel
-        public ObservableCollection<ProductsLuis> ProductsLuis
+        public ObservableCollection<ProductsLuisItemViewModel> ProductsLuis
         {
 
             get { return this.productsLuis; }
@@ -88,9 +89,22 @@ namespace Sales.ViewModels
 
             // obtenemos una lista del response.Result 
             var list = (List<ProductsLuis>)response.Result;
+            var myList = list.Select(p => new ProductsLuisItemViewModel 
+            {
+             
+              CVE_PRODUCTO_VAR = p.CVE_PRODUCTO_VAR ,
+              NOM_PROD_VAR     = p.NOM_PROD_VAR ,
+              PRECIO_DEC       = p.PRECIO_DEC ,
+              REMARK_VAR       = p.REMARK_VAR ,
+              RUTA_IMAGEN_VAR  = p.RUTA_IMAGEN_VAR ,
+              IS_AVAILABLE_BIT = p.IS_AVAILABLE_BIT ,
+              PUBLISH_ON_DATE  = p.PUBLISH_ON_DATE ,
+              ImageArray       = p.ImageArray ,
+
+            });
 
             //pasamos esa lista a ObservableCollection
-            this.ProductsLuis = new ObservableCollection<ProductsLuis>(list);
+            this.ProductsLuis = new ObservableCollection<ProductsLuisItemViewModel>(myList);
             this.IsRefreshing = false;
         } 
         #endregion

@@ -179,7 +179,7 @@ namespace Sales.ViewModels
 
 
 
-            //checamos si el usuaior seleccionó una imagen 
+            //checamos si el usuario seleccionó una imagen 
             // si es así la convertimos en un array de bites
             byte[] imageArray = null;
             if(this.file != null)
@@ -196,11 +196,12 @@ namespace Sales.ViewModels
                 PRECIO_DEC         = price ,
                 REMARK_VAR         = this.Remarks ,
                 UNIDAD_MEDIDA_VAR  = this.UnitOfMeasurement,
+                ImageArray         = imageArray ,
             };
 
 
             //enviamos el nuevo producto
-            /* var url = Application.Current.Resources["urlApi"].ToString();*/  //la url está en una llave en el App.xaml
+            /* var url = Application.Current.Resources["urlApi"].ToString();*/  //la url está en una llave en el ApnewProduct.xaml
             var response = await this.apiService.PostList("https://salesapigratis.azurewebsites.net", "/api", "/ProductsLuis", product);
 
             if (!response.IsSuccess)
@@ -222,7 +223,18 @@ namespace Sales.ViewModels
             // cargamos el nuevo producto para mostrarlo en la página principal de productos
             var newProduct = (ProductsLuis)response.Result;
             var viewModel = ProductsLuisViewModel.GetInstance();
-            viewModel.ProductsLuis.Add(newProduct);
+
+            viewModel.ProductsLuis.Add(new ProductsLuisItemViewModel
+            {
+              CVE_PRODUCTO_VAR = newProduct.CVE_PRODUCTO_VAR ,
+              NOM_PROD_VAR     = newProduct.NOM_PROD_VAR ,
+              PRECIO_DEC       = newProduct.PRECIO_DEC ,
+              REMARK_VAR       = newProduct.REMARK_VAR ,
+              RUTA_IMAGEN_VAR  = newProduct.RUTA_IMAGEN_VAR ,
+              IS_AVAILABLE_BIT = newProduct.IS_AVAILABLE_BIT ,
+              PUBLISH_ON_DATE  = newProduct.PUBLISH_ON_DATE ,
+              ImageArray       = newProduct.ImageArray ,
+            });
 
         
             this.IsRunning = false;

@@ -174,7 +174,6 @@
   <data name="UnitOfMeasurementPlaceHolder" xml:space="preserve">
     <value>Digite a unidade de medida!</value>
   </data>
-
   <data name="ImageSource" xml:space="preserve">
     <value>Onde você tira a foto ?!</value>
   </data>
@@ -186,5 +185,20 @@
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancelar</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Editar...</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Excluir</value>
+  </data>
+  <data name="DeleteConfirmation" xml:space="preserve">
+    <value>Você tem certeza que quer deletar isto</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Sim</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Não</value>
   </data>
 </root>
