@@ -53,6 +53,24 @@ namespace Sales.Api.Controllers
                 return BadRequest();
             }
 
+
+            if (productsLuis.ImageArray != null && productsLuis.ImageArray.Length > 0)
+            {
+                var stream = new MemoryStream(productsLuis.ImageArray);
+                var guid = Guid.NewGuid().ToString();
+                var file = $"{guid}.jpg";
+                var folder = "~/Content/ProductsLuis";
+                var fullPath = $"{folder}/{file}";
+                var response = FilesHelper.UploadPhoto(stream, folder, file);
+
+                if (response)
+                {
+                    productsLuis.RUTA_IMAGEN_VAR = fullPath;
+                }
+            }
+
+
+
             this.db.Entry(productsLuis).State = EntityState.Modified;
 
             try
@@ -71,7 +89,7 @@ namespace Sales.Api.Controllers
                 }
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            return Ok(productsLuis);
         }
 
         // POST: api/ProductsLuis

@@ -1,71 +1,67 @@
-﻿
+﻿using GalaSoft.MvvmLight.Command;
+using Plugin.Media;
+using Plugin.Media.Abstractions;
+using Sales.Common.Models;
+using Sales.Helpers;
+using Sales.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace Sales.ViewModels
 {
-
-
-    using GalaSoft.MvvmLight.Command;
-    using Sales.Helpers;
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Windows.Input;
-    using Xamarin.Forms;
-    using Services;
-    using Sales.Common.Models;
-    using Plugin.Media.Abstractions;
-    using Plugin.Media;
-
-    public class AddProductViewModel:BaseViewModel 
+    public class EditProdctsViewModel:BaseViewModel 
     {
-
-        #region Attributes
+        #region Atributtes
+        private ProductsLuis productsLuis;
         public bool isRunning;
         public bool isEnabled;
-        private ApiService apiService;
+        private Services.ApiService apiService;
         private ImageSource imageSource;
         private MediaFile file;
         #endregion
 
-        #region Properties
+        #region Propierties
+        public ProductsLuis Product
+        {
+            get { return this.productsLuis; }
+            set {this.SetValue (ref this.productsLuis, value) ; }
+        }
 
-        public string KeyProduct { get; set; }
-        public string Name { get; set; }
-        public string Price { get; set; }
-        public string Remarks { get; set; }
-        public string UnitOfMeasurement { get; set; }
         public bool IsRunning
         {
-            get { return this.isRunning ; }
+            get { return this.isRunning; }
             set { this.SetValue(ref this.isRunning, value); }
         }
 
 
         public bool IsEnabled
         {
-            get { return this.isEnabled  ; }
-            set { this.SetValue(ref this.isEnabled, value); }
+            get { return this.isEnabled; }
+            set { this.SetValue(ref this.isEnabled, value); } 
         }
 
         public ImageSource ImageSource
         {
-            get { return this.imageSource ; }
+            get { return this.imageSource; }
             set { this.SetValue(ref this.imageSource, value); }
         }
-
         #endregion
 
-        #region constructors
-
-        public AddProductViewModel()
+        #region Constructor
+        public EditProdctsViewModel(ProductsLuis productsLuis)
         {
-
+            this.productsLuis = productsLuis;
             this.isEnabled = true;
             this.apiService = new ApiService();
-            this.ImageSource = "noproduct";
+            this.ImageSource = productsLuis.ImageFullPath;
         }
-
         #endregion
+
+
 
         #region Commands
         public ICommand SaveCommand
@@ -77,11 +73,11 @@ namespace Sales.ViewModels
 
         }
 
-        private async  void Save()
+        private async void Save()
         {
 
             //clave del producto vacía
-            if (string.IsNullOrEmpty(this.KeyProduct))
+            if (string.IsNullOrEmpty(this.Product.CVE_PRODUCTO_VAR ))
             {
                 await Application.Current.MainPage.DisplayAlert
                      (
@@ -96,28 +92,12 @@ namespace Sales.ViewModels
 
 
             //nombre del producto vacío
-            if (string.IsNullOrEmpty(this.Name))
+            if (string.IsNullOrEmpty(this.Product.NOM_PROD_VAR ))
             {
                 await Application.Current.MainPage.DisplayAlert
                      (
                       Languages.Error,
                       Languages.DescriptionError,
-                      Languages .Accept 
-                     );
-
-
-                return;
-            }
-
-
-
-            //precio vacío
-            if (string.IsNullOrEmpty(this.Price))
-            {
-                await Application.Current.MainPage.DisplayAlert
-                     (
-                      Languages.Error,
-                      Languages.PriceError ,
                       Languages.Accept
                      );
 
@@ -126,9 +106,8 @@ namespace Sales.ViewModels
             }
 
 
-            //precio menor o igual a cero
-            var price = decimal.Parse(this.Price);
-            if (price <= 0)
+
+            if (this.Product.PRECIO_DEC  <= 0)
             {
                 await Application.Current.MainPage.DisplayAlert
                      (
@@ -143,7 +122,7 @@ namespace Sales.ViewModels
 
 
             //unidad de medida vacía
-            if (string .IsNullOrEmpty(UnitOfMeasurement))
+            if (string.IsNullOrEmpty(this.Product.UNIDAD_MEDIDA_VAR))
             {
                 await Application.Current.MainPage.DisplayAlert
                      (
@@ -158,23 +137,23 @@ namespace Sales.ViewModels
 
 
             this.IsRunning = true;
-            this.IsEnabled = false ;
+            this.IsEnabled = false;
 
 
             //checamos si el cel tiene conexión a internet
-            var connection = await this.apiService.CheckConnection();      
+            var connection = await this.apiService.CheckConnection();
             if (!connection.IsSuccess)
             {
-                this.IsRunning = false ;
-                this.IsEnabled = true  ;
+                this.IsRunning = false;
+                this.IsEnabled = true;
 
                 await Application.Current.MainPage.DisplayAlert
                  (
                   Languages.Error,
-                  connection.Message ,
+                  connection.Message,
                   Languages.Accept
                  );
-               return;
+                return;
             }
 
 
@@ -182,32 +161,21 @@ namespace Sales.ViewModels
             //checamos si el usuario seleccionó una imagen 
             // si es así la convertimos en un array de bites
             byte[] imageArray = null;
-            if(this.file != null)
+            if (this.file != null)
             {
                 imageArray = FileHelper.ReadFully(this.file.GetStream());
+                this.Product.ImageArray = imageArray;
             }
-
-
-            //vamos a agregar un nuevo producto
-            var product = new ProductsLuis
-            {
-                CVE_PRODUCTO_VAR   = KeyProduct ,
-                NOM_PROD_VAR       = this.Name ,
-                PRECIO_DEC         = price ,
-                REMARK_VAR         = this.Remarks ,
-                UNIDAD_MEDIDA_VAR  = this.UnitOfMeasurement,
-                ImageArray         = imageArray ,
-            };
 
 
             //enviamos el nuevo producto
             /* var url = Application.Current.Resources["urlApi"].ToString();*/  //la url está en una llave en el ApnewProduct.xaml
-            var response = await this.apiService.PostList("https://salesapigratis.azurewebsites.net", "/api", "/ProductsLuis", product);
+            var response = await this.apiService.Put("https://salesapigratis.azurewebsites.net", "/api", "/ProductsLuis", this.Product, this.Product.CVE_PRODUCTO_VAR);
 
             if (!response.IsSuccess)
             {
                 this.IsRunning = false;
-                this.IsEnabled = true ;
+                this.IsEnabled = true;
                 await Application.Current.MainPage.DisplayAlert
                 (
                  Languages.Error,
@@ -223,6 +191,14 @@ namespace Sales.ViewModels
             // cargamos el nuevo producto para mostrarlo en la página principal de productos
             var newProduct = (ProductsLuis)response.Result;
             var productsLuisViewModel = ProductsLuisViewModel.GetInstance();
+
+
+            var oldProduct = productsLuisViewModel.MyProducts.Where(p => p.CVE_PRODUCTO_VAR == this.Product.CVE_PRODUCTO_VAR).FirstOrDefault();
+            if(oldProduct != null)
+            {
+                productsLuisViewModel.MyProducts.Remove(oldProduct);
+            }
+
             productsLuisViewModel.MyProducts.Add(newProduct);
             productsLuisViewModel.RefreshList();
 

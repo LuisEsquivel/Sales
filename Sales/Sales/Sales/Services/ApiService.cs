@@ -50,7 +50,7 @@ namespace Sales.Services
 
         //CREAMOS UN METODO GENERICO PARA CONSUMIR DE CUALQUIER SERVICIO API
         //CUALQUIER LISTA DE UN OBJETO DEBES ASIGNAR T ASI>>> GetList<T>
-
+        //METODO PARA LISTAR LOS PRODUCTOS
         public async Task<Response> GetList<T>(string urlBase, string prefix, string controller)
 
 
@@ -112,6 +112,8 @@ namespace Sales.Services
 
 
 
+
+        //METODO PARA AGREGAR UN NUEVO PRODUCTO
         public async Task<Response> PostList<T>(string urlBase, string prefix, string controller, T model)
         {
 
@@ -135,6 +137,142 @@ namespace Sales.Services
 
                     //enviamos la respuesta
                     var response = await client.PostAsync(url, content);
+
+                    // obtenemos el contenido de la respuesta JSON
+                    var answer = await response.Content.ReadAsStringAsync();
+
+
+                    //si la respuesta es failled
+                    if (!response.IsSuccessStatusCode)
+                    {
+
+                        //creamos una nueva respuesta para el usuario
+                        return new Response
+                        {
+                            IsSuccess = false,
+                            Message = answer,
+                        };
+
+                    }
+
+                    //procedemos a deserializar el objeto o la respuesta obtenida
+                    var objeto = JsonConvert.DeserializeObject<T>(answer);
+                    return new Response
+                    {
+                        IsSuccess = true,
+                        Result = objeto,
+                    };
+
+
+
+                }
+                catch (Exception EX)
+                {
+                    return new Response
+                    {
+                        IsSuccess = false,
+                        Message = EX.Message,
+                    };
+
+
+                }
+            }
+
+
+        }
+
+
+
+
+        //METODO PARA ELIMINAR UN PRODUCTO
+        public async Task<Response> Delete(string urlBase, string prefix, string controller, string  id)
+
+
+        {
+            try
+            {
+                //creamos el objeto de tipo HttpClient
+                var client = new HttpClient();
+
+
+                //le pasamos la URL
+                client.BaseAddress = new Uri(urlBase);
+
+                //igual a usar un String.Format y concatenar variables
+                var url = $"{prefix}{controller}/{id}";
+
+                //solicitamos la respuesta
+                var response = await client.DeleteAsync(url);
+
+                // obtenemos el contenido de la respuesta JSON
+                var answer = await response.Content.ReadAsStringAsync();
+
+
+                //si la respuesta es failled
+                if (!response.IsSuccessStatusCode)
+                {
+
+                    //creamos una nueva respuesta para el usuario
+                    return new Response
+                    {
+                        IsSuccess = false,
+                        Message = answer,
+                    };
+
+                }
+
+           
+                return new Response
+                {
+                    IsSuccess = true
+                };
+
+
+
+            }
+            catch (Exception EX)
+            {
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message = EX.Message,
+                };
+
+
+            }
+        }
+
+
+
+
+
+
+
+
+        //METODO PARA ACTUALIZAR UN NUEVO PRODUCTO
+        public async Task<Response> Put<T>(string urlBase, string prefix, string controller, T model, string id)
+        {
+
+            {
+                try
+                {
+
+                    var request = JsonConvert.SerializeObject(model);
+                    var content = new StringContent(request, Encoding.UTF8, "application/json");
+
+
+                    //creamos el objeto de tipo HttpClient
+                    var client = new HttpClient();
+
+
+                    //le pasamos la URL
+                    client.BaseAddress = new Uri(urlBase);
+
+                    //igual a usar un String.Format y concatenar variables
+                    var url = $"{prefix}{controller}/{id}";
+
+                    //enviamos la respuesta
+                    var response = await client.PutAsync(url, content);
 
                     // obtenemos el contenido de la respuesta JSON
                     var answer = await response.Content.ReadAsStringAsync();

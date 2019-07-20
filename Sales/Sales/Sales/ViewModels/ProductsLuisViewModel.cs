@@ -27,6 +27,9 @@ namespace Sales.ViewModels
         #endregion
 
         #region Properties
+
+        public List<ProductsLuis> MyProducts { get; set; }
+
         //creamos una colección de ProductsLuis
         //refresca la viewModel
         public ObservableCollection<ProductsLuisItemViewModel> ProductsLuis
@@ -88,25 +91,32 @@ namespace Sales.ViewModels
 
 
             // obtenemos una lista del response.Result 
-            var list = (List<ProductsLuis>)response.Result;
-            var myList = list.Select(p => new ProductsLuisItemViewModel 
+            this.MyProducts = (List<ProductsLuis>)response.Result;
+            this.RefreshList();
+            this.IsRefreshing = false;
+        }
+
+        public void RefreshList()
+        {
+            var myListProductsLuisItemViewModel = this.MyProducts.Select(p => new ProductsLuisItemViewModel
             {
-             
-              CVE_PRODUCTO_VAR = p.CVE_PRODUCTO_VAR ,
-              NOM_PROD_VAR     = p.NOM_PROD_VAR ,
-              PRECIO_DEC       = p.PRECIO_DEC ,
-              REMARK_VAR       = p.REMARK_VAR ,
-              RUTA_IMAGEN_VAR  = p.RUTA_IMAGEN_VAR ,
-              IS_AVAILABLE_BIT = p.IS_AVAILABLE_BIT ,
-              PUBLISH_ON_DATE  = p.PUBLISH_ON_DATE ,
-              ImageArray       = p.ImageArray ,
+
+                CVE_PRODUCTO_VAR = p.CVE_PRODUCTO_VAR,
+                NOM_PROD_VAR = p.NOM_PROD_VAR,
+                PRECIO_DEC = p.PRECIO_DEC,
+                REMARK_VAR = p.REMARK_VAR,
+                RUTA_IMAGEN_VAR = p.RUTA_IMAGEN_VAR,
+                IS_AVAILABLE_BIT = p.IS_AVAILABLE_BIT,
+                PUBLISH_ON_DATE = p.PUBLISH_ON_DATE,
+                ImageArray = p.ImageArray,
+                UNIDAD_MEDIDA_VAR  = p.UNIDAD_MEDIDA_VAR ,
 
             });
 
             //pasamos esa lista a ObservableCollection
-            this.ProductsLuis = new ObservableCollection<ProductsLuisItemViewModel>(myList);
-            this.IsRefreshing = false;
-        } 
+            this.ProductsLuis = new ObservableCollection<ProductsLuisItemViewModel>(
+                myListProductsLuisItemViewModel.OrderBy(P => P.NOM_PROD_VAR));
+        }
         #endregion
 
         #region Singlenton
