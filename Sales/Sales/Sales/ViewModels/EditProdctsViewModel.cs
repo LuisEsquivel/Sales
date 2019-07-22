@@ -64,6 +64,77 @@ namespace Sales.ViewModels
 
 
         #region Commands
+
+        public ICommand DeleteCommand
+        {
+            get
+            {
+                return new RelayCommand(Delete);
+            }
+
+        }
+
+        private async void Delete()
+        {
+            var answer = await Application.Current.MainPage.DisplayAlert
+               (
+
+                Languages.Confirm,
+                Languages.DeleteConfirmation,
+                Languages.Yes,
+                Languages.No
+
+               );
+
+            if (!answer)
+            {
+                return;
+            }
+
+            this.IsRunning = true ;
+            this.IsEnabled = false ;
+
+            var connection = await this.apiService.CheckConnection();
+            //si no hay conexión le pintamos un mensaje al usuario
+            if (!connection.IsSuccess)
+            {
+
+                this.IsRunning = false ;
+                this.IsEnabled = true ;
+                await Application.Current.MainPage.DisplayAlert(Languages.Error, connection.Message, Languages.Accept);
+                return;
+            }
+
+            /* var url = Application.Current.Resources["urlApi"].ToString();*/  //la url está en una llave en el App.xaml
+            var response = await this.apiService.Delete("https://salesapigratis.azurewebsites.net", "/api", "/ProductsLuis", this.Product.CVE_PRODUCTO_VAR );
+
+            //no hay lista de productos
+            if (!response.IsSuccess)
+            {
+                this.IsRunning = false;
+                this.IsEnabled = true;
+                await Application.Current.MainPage.DisplayAlert(Languages.Error, response.Message, Languages.Accept);
+                return;
+            }
+
+            var productsViewModel = ProductsLuisViewModel.GetInstance();
+            var deleteProduct = productsViewModel.MyProducts.Where(p => p.CVE_PRODUCTO_VAR == this.Product.CVE_PRODUCTO_VAR).FirstOrDefault();
+
+            if (deleteProduct != null)
+            {
+                productsViewModel.MyProducts.Remove(deleteProduct);
+            }
+
+            productsViewModel.RefreshList();
+
+            this.IsRunning = false;
+            this.IsEnabled = true;
+            await Application.Current.MainPage.Navigation.PopAsync();
+        }
+
+
+
+
         public ICommand SaveCommand
         {
             get

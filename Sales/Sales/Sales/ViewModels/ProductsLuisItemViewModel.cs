@@ -74,12 +74,14 @@ namespace Sales.ViewModels
             }
 
             var productsViewModel = ProductsLuisViewModel.GetInstance();
-            var deleteProduct = productsViewModel.ProductsLuis.Where(p => p.CVE_PRODUCTO_VAR == this.CVE_PRODUCTO_VAR).FirstOrDefault();
+            var deleteProduct = productsViewModel.MyProducts.Where(p => p.CVE_PRODUCTO_VAR == this.CVE_PRODUCTO_VAR).FirstOrDefault();
 
             if(deleteProduct != null)
             {
-                productsViewModel.ProductsLuis.Remove(deleteProduct);
+                productsViewModel.MyProducts.Remove(deleteProduct);
             }
+
+            productsViewModel.RefreshList();
 
         }
 

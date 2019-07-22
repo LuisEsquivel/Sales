@@ -32,10 +32,19 @@
 
     <ContentPage.Content>
         <StackLayout
-            
+           
           BindingContext="{Binding ProductsLuis}"
           Padding="5" >
 
+
+            <SearchBar 
+              HeightRequest="30"
+              Placeholder = "{i18n:Translate Search}"  
+              SearchCommand="{Binding SearchCommand}"
+              Text="{Binding Filter}"
+             >
+
+            </SearchBar>
 
             <ListView 
                 
@@ -59,11 +68,22 @@
                             
                             <Grid>
 
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                      Command="{Binding EditProductCommand}" 
+                                    >
+                                    </TapGestureRecognizer>
+                                </Grid.GestureRecognizers>
+                                    
+                                
                                 <Grid.ColumnDefinitions>
 
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="2*"/>
                                     <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+
+
 
                                 </Grid.ColumnDefinitions>
 
@@ -97,6 +117,13 @@
                                     Text="{Binding PRECIO_DEC, StringFormat='{0:C2}' }">
                                 </Label>
 
+
+                                <Image
+                                Grid.Column="3"
+                                Source="ic_chevron_right"
+                                HorizontalOptions="Center"
+                                >
+                                </Image>
 
                             </Grid>
                                 

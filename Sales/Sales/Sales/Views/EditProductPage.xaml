@@ -56,6 +56,7 @@
                        Placeholder="{i18n:Translate KeyPlaceHolder}"
                        Grid.Column="1"
                        Grid.Row="0"
+                       IsEnabled="False"
                        Text="{Binding Product.CVE_PRODUCTO_VAR}"
                     >
                     </Entry>
@@ -144,7 +145,12 @@
                 </ActivityIndicator>
 
 
-                <Button 
+
+                <StackLayout
+                Orientation="Horizontal"
+                >
+                    
+               <Button 
                Text="{i18n:Translate Save}" 
                BorderRadius="23"
                HeightRequest="46"
@@ -152,9 +158,22 @@
                TextColor="White"
                IsEnabled="{Binding IsEnabled}"
                Command="{Binding SaveCommand}"
-             >
+               HorizontalOptions="FillAndExpand" 
+               ></Button>
 
-                </Button>
+               <Button 
+               Text="{i18n:Translate Delete}" 
+               BorderRadius="23"
+               HeightRequest="46"
+               BackgroundColor="Red"
+               TextColor="White"
+               IsEnabled="{Binding IsEnabled}"
+               Command="{Binding DeleteCommand}"
+               HorizontalOptions="FillAndExpand" 
+               ></Button>
+
+                </StackLayout>
+          
 
             </StackLayout>
 

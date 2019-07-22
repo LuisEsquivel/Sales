@@ -24,11 +24,24 @@ namespace Sales.ViewModels
         private bool isRefreshing;
         //atributo privado
         public ObservableCollection<ProductsLuisItemViewModel> productsLuis;
+        private string filter;
         #endregion
 
         #region Properties
 
         public List<ProductsLuis> MyProducts { get; set; }
+
+        public string Filter
+        {
+          get {
+                return this.filter;
+              }
+
+          set {
+                this.filter = value;
+                this.RefreshList();
+              }
+        }
 
         //creamos una colección de ProductsLuis
         //refresca la viewModel
@@ -98,26 +111,57 @@ namespace Sales.ViewModels
 
         public void RefreshList()
         {
-            var myListProductsLuisItemViewModel = this.MyProducts.Select(p => new ProductsLuisItemViewModel
+
+
+            if (string.IsNullOrEmpty(this.Filter))
             {
+                var myListProductsLuisItemViewModel = this.MyProducts.Select(p => new ProductsLuisItemViewModel
+                {
 
-                CVE_PRODUCTO_VAR = p.CVE_PRODUCTO_VAR,
-                NOM_PROD_VAR = p.NOM_PROD_VAR,
-                PRECIO_DEC = p.PRECIO_DEC,
-                REMARK_VAR = p.REMARK_VAR,
-                RUTA_IMAGEN_VAR = p.RUTA_IMAGEN_VAR,
-                IS_AVAILABLE_BIT = p.IS_AVAILABLE_BIT,
-                PUBLISH_ON_DATE = p.PUBLISH_ON_DATE,
-                ImageArray = p.ImageArray,
-                UNIDAD_MEDIDA_VAR  = p.UNIDAD_MEDIDA_VAR ,
+                    CVE_PRODUCTO_VAR = p.CVE_PRODUCTO_VAR,
+                    NOM_PROD_VAR = p.NOM_PROD_VAR,
+                    PRECIO_DEC = p.PRECIO_DEC,
+                    REMARK_VAR = p.REMARK_VAR,
+                    RUTA_IMAGEN_VAR = p.RUTA_IMAGEN_VAR,
+                    IS_AVAILABLE_BIT = p.IS_AVAILABLE_BIT,
+                    PUBLISH_ON_DATE = p.PUBLISH_ON_DATE,
+                    ImageArray = p.ImageArray,
+                    UNIDAD_MEDIDA_VAR = p.UNIDAD_MEDIDA_VAR,
 
-            });
+                });
 
-            //pasamos esa lista a ObservableCollection
-            this.ProductsLuis = new ObservableCollection<ProductsLuisItemViewModel>(
-                myListProductsLuisItemViewModel.OrderBy(P => P.NOM_PROD_VAR));
+                //pasamos esa lista a ObservableCollection
+                this.ProductsLuis = new ObservableCollection<ProductsLuisItemViewModel>(
+                    myListProductsLuisItemViewModel.OrderBy(P => P.NOM_PROD_VAR));
+
+
+
+            }else
+            {
+                var myListProductsLuisItemViewModel = this.MyProducts.Select(p => new ProductsLuisItemViewModel
+                {
+
+                    CVE_PRODUCTO_VAR = p.CVE_PRODUCTO_VAR,
+                    NOM_PROD_VAR = p.NOM_PROD_VAR,
+                    PRECIO_DEC = p.PRECIO_DEC,
+                    REMARK_VAR = p.REMARK_VAR,
+                    RUTA_IMAGEN_VAR = p.RUTA_IMAGEN_VAR,
+                    IS_AVAILABLE_BIT = p.IS_AVAILABLE_BIT,
+                    PUBLISH_ON_DATE = p.PUBLISH_ON_DATE,
+                    ImageArray = p.ImageArray,
+                    UNIDAD_MEDIDA_VAR = p.UNIDAD_MEDIDA_VAR,
+
+                }).Where(p => p.NOM_PROD_VAR.ToLower().Contains(this.Filter.ToLower()));
+
+
+                //pasamos esa lista a ObservableCollection
+                this.ProductsLuis = new ObservableCollection<ProductsLuisItemViewModel>(
+                    myListProductsLuisItemViewModel.OrderBy(P => P.NOM_PROD_VAR));
+            }
         }
-        #endregion
+
+        
+            #endregion
 
         #region Singlenton
         private static ProductsLuisViewModel instance;
@@ -135,6 +179,17 @@ namespace Sales.ViewModels
         #endregion
 
         #region Commands
+
+        public ICommand SearchCommand
+        {
+            get
+            {
+                return new RelayCommand(RefreshList);
+
+            }
+
+        }
+
         public ICommand RefreshCommand
         {
             get
