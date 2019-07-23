@@ -5,12 +5,13 @@ using Xamarin.Forms.Xaml;
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Sales
 {
-
+    using Sales.Helpers;
+    using Sales.ViewModels;
     using Sales.Views;
 
     public partial class App : Application
     {
- 
+        public static NavigationPage Navigator { get; internal set; }
 
         public App()
         {
@@ -18,8 +19,18 @@ namespace Sales
 
             //MainPage = new MainPage();
 
-            //LA PÁGINA PRINCIPAL VA A SER ProductsLuisPage
-            MainPage = new NavigationPage(new ProductsLuisPage());
+            if(Settings.IsRemembered  && !string.IsNullOrEmpty(Settings.AccessToken))
+            {
+                MainViewModel.GetInstance().ProductsLuis  = new ProductsLuisViewModel();
+                MainPage = new MasterPage();
+            }
+            else
+            {
+                MainViewModel.GetInstance().Login = new LoginViewModel();
+                MainPage = new NavigationPage(new LoginPage());
+            }
+          
+          
 
         }
 

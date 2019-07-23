@@ -106,7 +106,7 @@ namespace Sales.ViewModels
             }
 
             /* var url = Application.Current.Resources["urlApi"].ToString();*/  //la url está en una llave en el App.xaml
-            var response = await this.apiService.Delete("https://salesapigratis.azurewebsites.net", "/api", "/ProductsLuis", this.Product.CVE_PRODUCTO_VAR );
+            var response = await this.apiService.Delete("https://salesapigratis.azurewebsites.net", "/api", "/ProductsLuis", this.Product.CVE_PRODUCTO_VAR, Settings.TokenType, Settings.AccessToken);
 
             //no hay lista de productos
             if (!response.IsSuccess)
@@ -241,7 +241,7 @@ namespace Sales.ViewModels
 
             //enviamos el nuevo producto
             /* var url = Application.Current.Resources["urlApi"].ToString();*/  //la url está en una llave en el ApnewProduct.xaml
-            var response = await this.apiService.Put("https://salesapigratis.azurewebsites.net", "/api", "/ProductsLuis", this.Product, this.Product.CVE_PRODUCTO_VAR);
+            var response = await this.apiService.Put("https://salesapigratis.azurewebsites.net", "/api", "/ProductsLuis", this.Product, this.Product.CVE_PRODUCTO_VAR, Settings.TokenType, Settings.AccessToken);
 
             if (!response.IsSuccess)
             {

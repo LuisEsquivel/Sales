@@ -2,9 +2,12 @@
 namespace Sales.ViewModels
 {
     using GalaSoft.MvvmLight.Command;
+    using Sales.Helpers;
     using Sales.Views;
+    using Sales.ViewsModels;
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Text;
     using System.Windows.Input;
     using Xamarin.Forms;
@@ -16,6 +19,9 @@ namespace Sales.ViewModels
         public EditProdctsViewModel EditProduct { get; set; }
         public ProductsLuisViewModel ProductsLuis { get; set; }
         public AddProductViewModel AddProduct { get; set; }
+        public LoginViewModel  Login { get; set; }
+
+        public ObservableCollection<MenuItemViewModel> Menu { get; set;}
         #endregion
 
         #region Constructor
@@ -24,7 +30,33 @@ namespace Sales.ViewModels
         public MainViewModel()
         {
             instance = this;
-            this.ProductsLuis = new ProductsLuisViewModel();
+            this.LoadMenu();
+        }
+
+        private void LoadMenu()
+        {
+            this.Menu = new ObservableCollection<MenuItemViewModel>();
+
+            this.Menu.Add(new MenuItemViewModel
+            {
+                Icon = "ic_info_outline",
+                PageName = "AboutPage",
+                Title = Languages.About,
+            });
+
+            this.Menu.Add(new MenuItemViewModel
+            {
+                Icon = "ic_phonelink_setup",
+                PageName = "SetupPage",
+                Title = Languages.Setup,
+            });
+
+            this.Menu.Add(new MenuItemViewModel
+            {
+                Icon = "ic_exit_to_app",
+                PageName = "LoginPage",
+                Title = Languages.Exit,
+            });
         }
         #endregion
 
