@@ -13,6 +13,7 @@ namespace Sales.ViewModels
     using GalaSoft.MvvmLight.Command;
     using Sales.Helpers;
     using System.Linq;
+    using System.Threading.Tasks;
 
 
     //ESTA CLASE HEREDA DE LA BASEVIEWMODEL PARA REFRESAR LOS CAMBIOS GENERADOS
@@ -21,6 +22,7 @@ namespace Sales.ViewModels
 
         #region Attributes
         private ApiService apiService;
+        private DataService dataService;
         private bool isRefreshing;
         //atributo privado
         public ObservableCollection<ProductsLuisItemViewModel> productsLuis;
@@ -69,7 +71,8 @@ namespace Sales.ViewModels
         public ProductsLuisViewModel()
         {
             instance = this;
-            this.apiService = new ApiService();
+            this.apiService  = new ApiService();
+            this.dataService = new DataService();
             this.LoadProductsLuis();
         }
         #endregion
@@ -83,30 +86,66 @@ namespace Sales.ViewModels
             //cheacamos si hay conexión y la almacenamos en una vaiable
             var connection = await this.apiService.CheckConnection();
             //si´no hay conexión le pintamos un mensaje al usuario
-            if (!connection.IsSuccess)
+            if (connection.IsSuccess)
+            {
+                var answer = await this.LoadProductsFromAPI();
+                if(answer)
+                {
+                    this.SaveProductsToDB();
+                }
+                else
+                {
+                    await this.LoadProductsFromDB();
+                }
+
+            }
+
+
+            if(this.MyProducts == null || this.MyProducts.Count == 0)
             {
                 this.IsRefreshing = false;
-                await Application.Current.MainPage.DisplayAlert(Languages.Error, connection.Message, Languages.Accept);
+                await Application.Current.MainPage.DisplayAlert(Languages.Error, Languages.NoProductsMessage , Languages.Accept);
                 return;
             }
 
 
+
+            this.RefreshList();
+            this.IsRefreshing = false;
+        }
+
+
+        //pintamos los productos con los existentes en la BD sqLITE
+        private async  Task LoadProductsFromDB()
+        {
+            this.MyProducts = await this.dataService.GetAllProducts();
+        }
+
+
+        //eliminamos los productos de SQLLite y los volvemos a instalar
+        private async Task  SaveProductsToDB()
+        {
+            await this.dataService.DeleteAllProducts();
+            this.dataService.Insert(this.MyProducts);
+        }
+
+
+        //cargamos los productos consumiendo la API
+        private async Task<bool> LoadProductsFromAPI()
+        {
             /* var url = Application.Current.Resources["urlApi"].ToString();*/  //la url está en una llave en el App.xaml
-            var response = await this.apiService.GetList<ProductsLuis>("https://salesapigratis.azurewebsites.net", "/api", "/ProductsLuis", Settings.TokenType , Settings.AccessToken);
+            var response = await this.apiService.GetList<ProductsLuis>("https://salesapigratis.azurewebsites.net", "/api", "/ProductsLuis", Settings.TokenType, Settings.AccessToken);
 
             //no hay lista de productos
             if (!response.IsSuccess)
             {
-                this.IsRefreshing = false;
-                await Application.Current.MainPage.DisplayAlert(Languages.Error, response.Message, Languages.Accept);
-                return;
+                return false;
             }
 
 
             // obtenemos una lista del response.Result 
             this.MyProducts = (List<ProductsLuis>)response.Result;
-            this.RefreshList();
-            this.IsRefreshing = false;
+            return true;
         }
 
         public void RefreshList()

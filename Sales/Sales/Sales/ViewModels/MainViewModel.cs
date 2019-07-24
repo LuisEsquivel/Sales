@@ -4,13 +4,13 @@ namespace Sales.ViewModels
     using GalaSoft.MvvmLight.Command;
     using Sales.Helpers;
     using Sales.Views;
-    using Sales.ViewsModels;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Text;
     using System.Windows.Input;
     using Xamarin.Forms;
+   
 
     public class MainViewModel
     {
@@ -90,7 +90,7 @@ namespace Sales.ViewModels
         private async void GoToAddProduct()
         {
             this.AddProduct = new AddProductViewModel();
-            await Application.Current.MainPage.Navigation.PushAsync(new AddProductPage());
+            await App.Navigator.PushAsync(new AddProductPage());
         } 
         #endregion
     }

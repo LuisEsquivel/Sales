@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace Sales.ViewsModels
+namespace Sales.ViewModels 
 {
     public class MenuItemViewModel
     {
@@ -21,7 +21,7 @@ namespace Sales.ViewsModels
 
 
         #region Commands
-        public ICommand GoToCommand
+        public ICommand GotoCommand
         {
             get { return new RelayCommand(Goto); }
 

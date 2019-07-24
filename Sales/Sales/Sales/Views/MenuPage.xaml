@@ -13,7 +13,6 @@
             Padding="5">
             <Image
             Source="sales"
-            WidthRequest="100"
             >
                 
             </Image>

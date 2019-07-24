@@ -129,7 +129,7 @@ namespace Sales.ViewModels
 
             this.IsRunning = false;
             this.IsEnabled = true;
-            await Application.Current.MainPage.Navigation.PopAsync();
+            await App.Navigator.PopAsync();
         }
 
 
@@ -277,7 +277,7 @@ namespace Sales.ViewModels
             this.IsEnabled = true;
 
             //volvemos a la página principal
-            await Application.Current.MainPage.Navigation.PopAsync();
+            await App.Navigator.PopAsync();
 
         }
 

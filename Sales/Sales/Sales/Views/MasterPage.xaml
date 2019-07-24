@@ -6,15 +6,16 @@
                    Title="MasterPage">
 
     <MasterDetailPage.Master >
-        <pages:MenuPage></pages:MenuPage>
+        <pages:MenuPage/>
     </MasterDetailPage.Master>
 
 
     <MasterDetailPage.Detail >
+        
         <NavigationPage x:Name="Navigator">
 
             <x:Arguments>
-                <pages:ProductsLuisPage></pages:ProductsLuisPage>
+                <pages:ProductsLuisPage/>
             </x:Arguments>
             
         </NavigationPage>

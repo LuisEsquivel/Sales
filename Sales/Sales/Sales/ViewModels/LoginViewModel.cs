@@ -132,7 +132,7 @@ namespace Sales.ViewModels
 
 
             MainViewModel.GetInstance().ProductsLuis = new ProductsLuisViewModel();
-            Application.Current.MainPage = new ProductsLuisPage();
+            Application.Current.MainPage = new MasterPage();
             this.IsRunninng = false;
             this.IsEnabled = true;
 
