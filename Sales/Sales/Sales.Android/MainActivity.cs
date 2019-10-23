@@ -8,6 +8,7 @@ using Android.Widget;
 using Android.OS;
 using Plugin.Permissions;
 using Plugin.CurrentActivity;
+using ImageCircle.Forms.Plugin.Droid;
 
 namespace Sales.Droid
 {
@@ -21,10 +22,9 @@ namespace Sales.Droid
 
             base.OnCreate(savedInstanceState);
 
-
-            //inicializando pligin para cargar fotos JAMES MONTEMAGNO
+            //inicializando plugin para cargar fotos JAMES MONTEMAGNO
             CrossCurrentActivity.Current.Init(this, savedInstanceState);
-
+            ImageCircleRenderer.Init();
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
         }

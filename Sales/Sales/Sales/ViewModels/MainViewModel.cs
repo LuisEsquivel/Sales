@@ -2,6 +2,7 @@
 namespace Sales.ViewModels
 {
     using GalaSoft.MvvmLight.Command;
+    using Sales.Common.Models;
     using Sales.Helpers;
     using Sales.Views;
     using System;
@@ -21,8 +22,45 @@ namespace Sales.ViewModels
         public AddProductViewModel AddProduct { get; set; }
         public LoginViewModel  Login { get; set; }
         public RegisterViewModel  Register  { get; set; }
+        public MyUserASP UserAsp { get; set; }
 
         public ObservableCollection<MenuItemViewModel> Menu { get; set;}
+
+
+        public string UserFullName
+        {
+            get
+            {
+                if (this.UserAsp != null && this.UserAsp.Claims != null && this.UserAsp.Claims.Count > 1)
+                {
+                    return $"{this.UserAsp.Claims[0].ClaimValue} {this.UserAsp.Claims[1].ClaimValue}";
+                }
+
+                return null;
+            }
+        }
+
+        public string UserImageFullPath
+        {
+            get
+            {
+                foreach (var claim in this.UserAsp.Claims)
+                {
+                    if (claim.ClaimType == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/uri")
+                    {
+                        if (claim.ClaimValue.StartsWith("~"))
+                        {
+                            return $"https://salesapigratis.azurewebsites.net{claim.ClaimValue.Substring(1)}";
+                        }
+
+                        return claim.ClaimValue;
+                    }
+                }
+
+                return null;
+            }
+        }
+
         #endregion
 
         #region Constructor

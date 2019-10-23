@@ -1,4 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using Newtonsoft.Json;
+using Sales.Common.Models;
 using Sales.Helpers;
 using Sales.Services;
 using Sales.Views;
@@ -27,7 +29,7 @@ namespace Sales.ViewModels
         public bool IsRemembered { get; set; }
 
 
-        public bool IsRunninng
+        public bool IsRunning
         {
             get { return this.isRunning; }
             set { this.SetValue(ref this.isRunning, value); }
@@ -104,7 +106,7 @@ namespace Sales.ViewModels
                 return;
             }
 
-            this.IsRunninng = true;
+            this.IsRunning = true;
             this.IsEnabled = false;
 
 
@@ -113,7 +115,7 @@ namespace Sales.ViewModels
             //si´no hay conexión le pintamos un mensaje al usuario
             if (!connection.IsSuccess)
             {
-                this.IsRunninng  = false;
+                this.IsRunning  = false;
                 this.IsEnabled = true;
                 await Application.Current.MainPage.DisplayAlert(Languages.Error, connection.Message, Languages.Accept);
                 return;
@@ -126,7 +128,7 @@ namespace Sales.ViewModels
             if(token == null || string.IsNullOrEmpty(token.AccessToken))
             {
 
-                this.IsRunninng = false;
+                this.IsRunning = false;
                 this.IsEnabled = true;
                 await Application.Current.MainPage.DisplayAlert
                     (
@@ -141,26 +143,115 @@ namespace Sales.ViewModels
             }
 
             //guardamos el tipo de token, el token como tal y si el usuario es recordado o no
-            Settings.TokenType = token.TokenType;
-            Settings.AccessToken  = token.AccessToken ;
-            Settings.IsRemembered = this.IsRemembered;
-
+            var prefix = Application.Current.Resources["UrlPrefix"].ToString();
+            var controller = Application.Current.Resources["UrlUsersController"].ToString();
+            var response = await this.apiService.GetUser(url, prefix, $"{controller}/GetUser", this.Email, token.TokenType, token.AccessToken);
+            if (response.IsSuccess)
+            {
+                var userASP = (MyUserASP)response.Result;
+                MainViewModel.GetInstance().UserAsp  = userASP;
+                //MainViewModel.GetInstance().RegisterDevice();
+                Settings.UserASP = JsonConvert.SerializeObject(userASP);
+            }
 
 
             MainViewModel.GetInstance().ProductsLuis = new ProductsLuisViewModel();
             Application.Current.MainPage = new MasterPage();
-            this.IsRunninng = false;
+            this.IsRunning = false;
             this.IsEnabled = true;
+
 
         }
 
 
+
+        public ICommand LoginFacebookComand
+        {
+            get
+            {
+                return new RelayCommand(LoginFacebook);
+            }
+        }
+
+        private async void LoginFacebook()
+        {
+            var connection = await this.apiService.CheckConnection();
+
+            if (!connection.IsSuccess)
+            {
+                this.IsRunning  = false;
+                this.IsEnabled = true;
+                await Application.Current.MainPage.DisplayAlert(
+                    Languages.Error,
+                    connection.Message,
+                    Languages.Accept);
+                return;
+            }
+
+            await Application.Current.MainPage.Navigation.PushAsync(
+                new LoginFacebookPage());
+        }
+
+        public ICommand LoginInstagramComand
+        {
+            get
+            {
+                return new RelayCommand(LoginInstagram);
+            }
+        }
+
+        private async void LoginInstagram()
+        {
+            var connection = await this.apiService.CheckConnection();
+
+            if (!connection.IsSuccess)
+            {
+                this.IsRunning = false;
+                this.IsEnabled = true;
+                await Application.Current.MainPage.DisplayAlert(
+                    Languages.Error,
+                    connection.Message,
+                    Languages.Accept);
+                return;
+            }
+
+            await Application.Current.MainPage.Navigation.PushAsync(
+                new LoginInstagramPage());
+        }
+
+        public ICommand LoginTwitterComand
+        {
+            get
+            {
+                return new RelayCommand(LoginTwitter);
+            }
+        }
+
+        private async void LoginTwitter()
+        {
+            var connection = await this.apiService.CheckConnection();
+
+            if (!connection.IsSuccess)
+            {
+                this.IsRunning = false;
+                this.IsEnabled = true;
+                await Application.Current.MainPage.DisplayAlert(
+                    Languages.Error,
+                    connection.Message,
+                    Languages.Accept);
+                return;
+            }
+
+            await Application.Current.MainPage.Navigation.PushAsync(
+                new LoginTwitterPage());
+        }
         #endregion
 
 
-        #region Methods
-        #endregion
 
 
     }
 }
+
+
+

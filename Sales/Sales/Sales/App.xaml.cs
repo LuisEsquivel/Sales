@@ -5,6 +5,8 @@ using Xamarin.Forms.Xaml;
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Sales
 {
+    using Newtonsoft.Json;
+    using Sales.Common.Models;
     using Sales.Helpers;
     using Sales.ViewModels;
     using Sales.Views;
@@ -17,22 +19,27 @@ namespace Sales
         {
             InitializeComponent();
 
-            //MainPage = new MainPage();
+            var mainViewModel = MainViewModel.GetInstance();
 
-            if(Settings.IsRemembered  && !string.IsNullOrEmpty(Settings.AccessToken))
+            if (Settings.IsRemembered)
             {
-                MainViewModel.GetInstance().ProductsLuis  = new ProductsLuisViewModel();
-                MainPage = new MasterPage();
+
+                if (!string.IsNullOrEmpty(Settings.UserASP))
+                {
+                    mainViewModel.UserAsp  = JsonConvert.DeserializeObject<MyUserASP>(Settings.UserASP);
+                    
+                }
+
+                mainViewModel.ProductsLuis = new ProductsLuisViewModel();
+                this.MainPage = new MasterPage();
             }
             else
             {
-                MainViewModel.GetInstance().Login = new LoginViewModel();
-                MainPage = new NavigationPage(new LoginPage());
+                mainViewModel.Login = new LoginViewModel();
+                this.MainPage = new NavigationPage(new LoginPage());
             }
-          
-          
-
         }
+
 
         protected override void OnStart()
         {
