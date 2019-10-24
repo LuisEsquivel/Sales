@@ -202,7 +202,7 @@ namespace Sales.ViewModels
 
             //enviamos el nuevo producto
             /* var url = Application.Current.Resources["urlApi"].ToString();*/  //la url está en una llave en el ApnewProduct.xaml
-            var response = await this.apiService.PostList("https://salesapigratis.azurewebsites.net", "/api", "/ProductsLuis", product, Settings.TokenType, Settings.AccessToken);
+            var response = await this.apiService.PostList("http://salesapi.somee.com/", "/api", "/ProductsLuis", product, Settings.TokenType, Settings.AccessToken);
 
             if (!response.IsSuccess)
             {

@@ -122,7 +122,7 @@ namespace Sales.ViewModels
             }
 
             /* var url = Application.Current.Resources["urlApi"].ToString();*/  //la url está en una llave en el App.xaml
-            var url = "https://salesapigratis.azurewebsites.net";
+            var url = "http://salesapi.somee.com/";
             var token = await this.apiService.GetToken(url, this.Email, this.Password);
 
             if(token == null || string.IsNullOrEmpty(token.AccessToken))

@@ -134,7 +134,7 @@ namespace Sales.ViewModels
         private async Task<bool> LoadProductsFromAPI()
         {
             /* var url = Application.Current.Resources["urlApi"].ToString();*/  //la url está en una llave en el App.xaml
-            var response = await this.apiService.GetList<ProductsLuis>("https://salesapigratis.azurewebsites.net", "/api", "/ProductsLuis", Settings.TokenType, Settings.AccessToken);
+            var response = await this.apiService.GetList<ProductsLuis>("http://salesapi.somee.com/", "/api", "/ProductsLuis", Settings.TokenType, Settings.AccessToken);
 
             //no hay lista de productos
             if (!response.IsSuccess)
