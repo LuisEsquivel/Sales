@@ -53,7 +53,7 @@ namespace Sales.Common.Models
             {
                 if(!string.IsNullOrEmpty(this.RUTA_IMAGEN_VAR))
                 {
-                    return $"https://salesapigratis.azurewebsites.net/{this.RUTA_IMAGEN_VAR.Substring(1)}";
+                    return $"http://salesapi.somee.com/{this.RUTA_IMAGEN_VAR.Substring(1)}";
 
                 }
 
